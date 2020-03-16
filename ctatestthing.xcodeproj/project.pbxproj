@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0B33D7CA24201E5300AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7CB24201E7400AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
+		0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7D1242020EC00AF4D11 /* Secret.swift */; };
 		0B3CF948241FBF2B001CD23D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3CF947241FBF2B001CD23D /* AppDelegate.swift */; };
 		0B3CF94A241FBF2B001CD23D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3CF949241FBF2B001CD23D /* SceneDelegate.swift */; };
 		0B3CF94C241FBF2B001CD23D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3CF94B241FBF2B001CD23D /* ViewController.swift */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0B33D7D1242020EC00AF4D11 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		0B3CF944241FBF2B001CD23D /* ctatestthing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ctatestthing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B3CF947241FBF2B001CD23D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0B3CF949241FBF2B001CD23D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,9 +128,18 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0B33D7D0242020D700AF4D11 /* Secrets */ = {
+			isa = PBXGroup;
+			children = (
+				0B33D7D1242020EC00AF4D11 /* Secret.swift */,
+			);
+			path = Secrets;
+			sourceTree = "<group>";
+		};
 		0B3CF93B241FBF2B001CD23D = {
 			isa = PBXGroup;
 			children = (
+				0B33D7D0242020D700AF4D11 /* Secrets */,
 				0B3CF946241FBF2B001CD23D /* ctatestthing */,
 				0B3CF95D241FBF31001CD23D /* ctatestthingTests */,
 				0B3CF945241FBF2B001CD23D /* Products */,
@@ -360,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B9B691B241FC7AB0062CDF2 /* SearchViewController.swift in Sources */,
+				0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */,
 				0B9B6923241FC7EE0062CDF2 /* DetailView.swift in Sources */,
 				0B9B6919241FC79F0062CDF2 /* LoginViewController.swift in Sources */,
 				0B3CF94C241FBF2B001CD23D /* ViewController.swift in Sources */,
