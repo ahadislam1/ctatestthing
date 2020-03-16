@@ -3,13 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0B33D7CA24201E5300AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7CB24201E7400AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7D1242020EC00AF4D11 /* Secret.swift */; };
+		0B33D7D42420226700AF4D11 /* AuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7D32420226700AF4D11 /* AuthenticationSession.swift */; };
+		0B33D7D6242022A000AF4D11 /* GenericCoderAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7D5242022A000AF4D11 /* GenericCoderAPI.swift */; };
+		0B33D7D92420230300AF4D11 /* NetworkHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 0B33D7D82420230300AF4D11 /* NetworkHelper */; };
+		0B33D7DB2420239000AF4D11 /* UIViewController+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7DA2420239000AF4D11 /* UIViewController+Navigation.swift */; };
+		0B33D7DD2420239900AF4D11 /* UIViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7DC2420239900AF4D11 /* UIViewController+Alerts.swift */; };
+		0B33D7E12420240400AF4D11 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7E02420240400AF4D11 /* EmptyView.swift */; };
 		0B3CF948241FBF2B001CD23D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3CF947241FBF2B001CD23D /* AppDelegate.swift */; };
 		0B3CF94A241FBF2B001CD23D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3CF949241FBF2B001CD23D /* SceneDelegate.swift */; };
 		0B3CF94C241FBF2B001CD23D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3CF94B241FBF2B001CD23D /* ViewController.swift */; };
@@ -41,6 +47,11 @@
 /* Begin PBXFileReference section */
 		0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B33D7D1242020EC00AF4D11 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
+		0B33D7D32420226700AF4D11 /* AuthenticationSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationSession.swift; sourceTree = "<group>"; };
+		0B33D7D5242022A000AF4D11 /* GenericCoderAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCoderAPI.swift; sourceTree = "<group>"; };
+		0B33D7DA2420239000AF4D11 /* UIViewController+Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Navigation.swift"; sourceTree = "<group>"; };
+		0B33D7DC2420239900AF4D11 /* UIViewController+Alerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alerts.swift"; sourceTree = "<group>"; };
+		0B33D7E02420240400AF4D11 /* EmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		0B3CF944241FBF2B001CD23D /* ctatestthing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ctatestthing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B3CF947241FBF2B001CD23D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0B3CF949241FBF2B001CD23D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16FA3D12C64D7044D663B191 /* Pods_ctatestthing.framework in Frameworks */,
+				0B33D7D92420230300AF4D11 /* NetworkHelper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				0B9B6922241FC7EE0062CDF2 /* DetailView.swift */,
+				0B33D7E02420240400AF4D11 /* EmptyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -136,10 +149,27 @@
 			path = Secrets;
 			sourceTree = "<group>";
 		};
+		0B33D7DE242023A000AF4D11 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0B33D7D32420226700AF4D11 /* AuthenticationSession.swift */,
+				0B33D7D5242022A000AF4D11 /* GenericCoderAPI.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		0B33D7DF242023A700AF4D11 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0B33D7DA2420239000AF4D11 /* UIViewController+Navigation.swift */,
+				0B33D7DC2420239900AF4D11 /* UIViewController+Alerts.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		0B3CF93B241FBF2B001CD23D = {
 			isa = PBXGroup;
 			children = (
-				0B33D7D0242020D700AF4D11 /* Secrets */,
 				0B3CF946241FBF2B001CD23D /* ctatestthing */,
 				0B3CF95D241FBF31001CD23D /* ctatestthingTests */,
 				0B3CF945241FBF2B001CD23D /* Products */,
@@ -163,6 +193,9 @@
 				0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */,
 				0B3CF955241FBF31001CD23D /* Info.plist */,
 				0B33D7CC2420203800AF4D11 /* Controllers */,
+				0B33D7DF242023A700AF4D11 /* Extensions */,
+				0B33D7D0242020D700AF4D11 /* Secrets */,
+				0B33D7DE242023A000AF4D11 /* Services */,
 				0B33D7CD2420204500AF4D11 /* Storyboards */,
 				0B33D7CF2420205900AF4D11 /* Supporting Files */,
 				0B33D7CE2420204D00AF4D11 /* Views */,
@@ -217,6 +250,9 @@
 			dependencies = (
 			);
 			name = ctatestthing;
+			packageProductDependencies = (
+				0B33D7D82420230300AF4D11 /* NetworkHelper */,
+			);
 			productName = ctatestthing;
 			productReference = 0B3CF944241FBF2B001CD23D /* ctatestthing.app */;
 			productType = "com.apple.product-type.application";
@@ -268,6 +304,9 @@
 				Base,
 			);
 			mainGroup = 0B3CF93B241FBF2B001CD23D;
+			packageReferences = (
+				0B33D7D72420230300AF4D11 /* XCRemoteSwiftPackageReference "NetworkHelperSPM" */,
+			);
 			productRefGroup = 0B3CF945241FBF2B001CD23D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -371,14 +410,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B9B691B241FC7AB0062CDF2 /* SearchViewController.swift in Sources */,
+				0B33D7E12420240400AF4D11 /* EmptyView.swift in Sources */,
+				0B33D7D42420226700AF4D11 /* AuthenticationSession.swift in Sources */,
 				0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */,
 				0B9B6923241FC7EE0062CDF2 /* DetailView.swift in Sources */,
+				0B33D7D6242022A000AF4D11 /* GenericCoderAPI.swift in Sources */,
+				0B33D7DD2420239900AF4D11 /* UIViewController+Alerts.swift in Sources */,
 				0B9B6919241FC79F0062CDF2 /* LoginViewController.swift in Sources */,
 				0B3CF94C241FBF2B001CD23D /* ViewController.swift in Sources */,
 				0B3CF948241FBF2B001CD23D /* AppDelegate.swift in Sources */,
 				0B9B691D241FC7B20062CDF2 /* FavoritesViewController.swift in Sources */,
 				0B9B691F241FC7B70062CDF2 /* SettingViewController.swift in Sources */,
 				0B3CF94A241FBF2B001CD23D /* SceneDelegate.swift in Sources */,
+				0B33D7DB2420239000AF4D11 /* UIViewController+Navigation.swift in Sources */,
 				0B9B6921241FC7E30062CDF2 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -650,6 +694,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0B33D7D72420230300AF4D11 /* XCRemoteSwiftPackageReference "NetworkHelperSPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alexpaul/NetworkHelperSPM";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0B33D7D82420230300AF4D11 /* NetworkHelper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0B33D7D72420230300AF4D11 /* XCRemoteSwiftPackageReference "NetworkHelperSPM" */;
+			productName = NetworkHelper;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B3CF93C241FBF2B001CD23D /* Project object */;
 }
