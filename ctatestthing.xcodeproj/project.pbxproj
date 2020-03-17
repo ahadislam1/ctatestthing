@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B01282F2421879000F37A2B /* TicketmasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B01282E2421879000F37A2B /* TicketmasterTableViewCell.swift */; };
 		0B33D7CA24201E5300AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7CB24201E7400AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7D1242020EC00AF4D11 /* Secret.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0B01282E2421879000F37A2B /* TicketmasterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketmasterTableViewCell.swift; sourceTree = "<group>"; };
 		0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B33D7D1242020EC00AF4D11 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		0B33D7D32420226700AF4D11 /* AuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			children = (
 				0B9B6922241FC7EE0062CDF2 /* DetailView.swift */,
 				0B33D7E02420240400AF4D11 /* EmptyView.swift */,
+				0B01282E2421879000F37A2B /* TicketmasterTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				0B9B6923241FC7EE0062CDF2 /* DetailView.swift in Sources */,
 				0B33D7D6242022A000AF4D11 /* GenericCoderAPI.swift in Sources */,
 				0B33D7DD2420239900AF4D11 /* UIViewController+Alerts.swift in Sources */,
+				0B01282F2421879000F37A2B /* TicketmasterTableViewCell.swift in Sources */,
 				0B9B6919241FC79F0062CDF2 /* LoginViewController.swift in Sources */,
 				0B33D7E3242116B000AF4D11 /* FirestoreSession.swift in Sources */,
 				0B3CF94C241FBF2B001CD23D /* ViewController.swift in Sources */,

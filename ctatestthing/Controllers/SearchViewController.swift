@@ -10,7 +10,16 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    var experience: APIExperience!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    var experience: APIExperience! {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -20,6 +29,10 @@ class SearchViewController: UIViewController {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         loadData()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
     
     private func loadData() {
@@ -46,10 +59,23 @@ class SearchViewController: UIViewController {
             }
         }
     }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        
+}
+
+extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 0
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return UITableViewCell()
+    }
+    
+    
+}
+
+extension SearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
 }
