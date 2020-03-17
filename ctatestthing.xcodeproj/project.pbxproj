@@ -106,9 +106,9 @@
 			children = (
 				0B9B6920241FC7E30062CDF2 /* DetailViewController.swift */,
 				0B9B691C241FC7B20062CDF2 /* FavoritesViewController.swift */,
-				0B9B6918241FC79F0062CDF2 /* LoginViewController.swift */,
 				0B9B691A241FC7AB0062CDF2 /* SearchViewController.swift */,
 				0B9B691E241FC7B70062CDF2 /* SettingViewController.swift */,
+				0B9B6918241FC79F0062CDF2 /* LoginViewController.swift */,
 				0B3CF94B241FBF2B001CD23D /* ViewController.swift */,
 			);
 			path = Controllers;

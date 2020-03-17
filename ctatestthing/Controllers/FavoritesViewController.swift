@@ -9,22 +9,42 @@
 import UIKit
 
 class FavoritesViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    
+    var experience: APIExperience!
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        loadData()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        loadData()
     }
-    */
+    
+    private func loadData() {
+        FirestoreSession.session.getUserExperience { result in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let str):
+                self.experience = APIExperience(rawValue: str)!
+                self.listener()
+                print(self.experience.description)
+            }
+        }
+    }
+    
+    private func listener() {
+        FirestoreSession.session.addListener { result in
+            switch result {
+            case .success(let str):
+                self.experience = APIExperience(rawValue: str)!
+                print("Listener updated.")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 
 }

@@ -34,8 +34,21 @@ class ctatestthingTests: XCTestCase {
         wait(for: [exp], timeout: 2)
     }
     
-    func updateUserExperience() {
+    func testUpdateUserExperience() {
+        let experience = APIExperience.rijksMuseum.rawValue
+        let exp = XCTestExpectation(description: "ok")
         
+        FirestoreSession.session.updateDatabaseUser(experience) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            case .success(let bool):
+                XCTAssertTrue(bool)
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 2)
     }
 
 }

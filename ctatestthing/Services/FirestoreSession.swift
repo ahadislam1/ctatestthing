@@ -68,4 +68,30 @@ class FirestoreSession {
                 }
         }
     }
+    
+    public func addListener(completion: @escaping (Result<String, Error>) -> ()) {
+        guard let user = Auth.auth().currentUser else { return }
+        db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .addSnapshotListener { (documentSnapshot, error) in
+                if let error = error {
+                    completion(.failure(error))
+                }
+                
+                guard let document = documentSnapshot else {
+                    print("no document")
+                    return
+                }
+                
+                guard let data = document.data() else {
+                    print("no data")
+                    return
+                }
+                
+                completion(.success(data["apiExperience"] as! String))
+                
+                
+        }
+    }
+
 }

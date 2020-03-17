@@ -14,7 +14,11 @@ enum AccountState {
     case newUser
 }
 
-enum APIExperience: String {
+enum APIExperience: String, CustomStringConvertible {
+    var description: String {
+        self.rawValue
+    }
+    
     case ticketMaster = "TicketMaster"
     case rijksMuseum = "Rijksmuseum"
     
@@ -25,6 +29,8 @@ enum APIExperience: String {
             return APIExperience.rijksMuseum.rawValue
         }
     }
+    
+    
 }
 
 class LoginViewController: UIViewController {
