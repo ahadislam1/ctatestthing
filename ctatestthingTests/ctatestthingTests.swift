@@ -15,5 +15,27 @@ class ctatestthingTests: XCTestCase {
     func testLOGOUT() {
         try? Auth.auth().signOut()
     }
+    
+    func testValidateExperience() {
+        var experience: String? = nil
+        let exp = XCTestExpectation(description: "sure")
+        
+        FirestoreSession.session.getUserExperience { result in
+            switch result {
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            case .success(let str):
+                experience = str
+                XCTAssertNotNil(experience)
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 2)
+    }
+    
+    func updateUserExperience() {
+        
+    }
 
 }
