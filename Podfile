@@ -10,7 +10,9 @@ target 'ctatestthing' do
   # https://firebase.google.com/docs/ios/setup#available-pods
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+  pod 'FirebaseFirestoreSwift'
   pod 'Kingfisher'
+
 
 
   target 'ctatestthingTests' do

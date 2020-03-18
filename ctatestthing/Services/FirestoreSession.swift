@@ -9,18 +9,21 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class FirestoreSession {
     private init() {}
     static let session = FirestoreSession()
     
     private static let usersCollection = "users"
+    private static let ticketsCollection = "tickets"
+    private static let artsCollection = "arts"
     
     private let db = Firestore.firestore()
     
     public func createDatabaseUser(authDataResult: AuthDataResult,
-                                    apiExperience: String,
-                                    completion: @escaping (Result<Bool, Error>) -> Void) {
+                                   apiExperience: String,
+                                   completion: @escaping (Result<Bool, Error>) -> Void) {
         guard let email = authDataResult.user.email else {
             return
         }
@@ -93,5 +96,80 @@ class FirestoreSession {
                 
         }
     }
-
+    
+    public func addItem<T: Codable & Identification>(_ item: T, experience: APIExperience, completion: @escaping (Result<Bool, Error>) -> ()) {
+        guard let user = Auth.auth().currentUser else { return }
+        let document = db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .collection(experience ==  .ticketMaster ?
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            .document(item.id)
+        
+        do {
+            try document.setData(from: item)
+            completion(.success(true))
+        } catch let error {
+            completion(.failure(error))
+        }
+        
+    }
+    
+    public func deleteItem<T: Codable & Identification>(_ item: T, experience: APIExperience, completion: @escaping (Result<Bool, Error>) -> ()) {
+        guard let user = Auth.auth().currentUser else { return }
+        db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .collection(experience == .ticketMaster ?
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            .document(item.id)
+            .delete { (error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(true))
+                }
+        }
+    }
+    
+    public func isItemFavorited<T: Codable & Identification>(_ item: T, experience: APIExperience, completion: @escaping (Result<Bool, Error>) -> ()) {
+        guard let user = Auth.auth().currentUser else { return }
+        db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .collection(experience == .ticketMaster ?
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            .whereField("id", isEqualTo: item.id)
+            .getDocuments { (snapshot, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let snapshot = snapshot {
+                    snapshot.documents.count > 0 ? completion(.success(true)) : completion(.success(false))
+                }
+        }
+        
+    }
+        
+    public func fetchItems<T: Codable>(type: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) {
+        guard let user = Auth.auth().currentUser else { return }
+        var items = [T?]()
+        
+        db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .collection(experience == .ticketMaster ?
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            .getDocuments { (snapshot, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let snapshot = snapshot {
+                    for document in snapshot.documents {
+                        do {
+                            let item = try document.data(as: T.self)
+                            items.append(item)
+                        } catch let error {
+                            completion(.failure(error))
+                        }
+                    }
+                    
+                    completion(.success(items.compactMap { $0 }))
+                }
+        }
+    }
 }

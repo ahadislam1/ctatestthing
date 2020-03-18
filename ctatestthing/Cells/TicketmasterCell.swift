@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Kingfisher
 
-class TicketmasterTableViewCell: UITableViewCell {
+class TicketmasterCell: UITableViewCell {
 
     @IBOutlet weak var ticketImageView: UIImageView!
     @IBOutlet weak var label: UILabel!
@@ -23,6 +24,17 @@ class TicketmasterTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    public func configureCell(_ event: Event) {
+        label.text = event.name
+        secondLabel.text = event.dates.start.localDate
+        
+        guard let image = event.images.first, let url = URL(string: image.url) else {
+            return
+        }
+        
+        ticketImageView.kf.setImage(with: url)
     }
 
 }

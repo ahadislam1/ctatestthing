@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B01282F2421879000F37A2B /* TicketmasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B01282E2421879000F37A2B /* TicketmasterTableViewCell.swift */; };
+		0B01282F2421879000F37A2B /* TicketmasterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B01282E2421879000F37A2B /* TicketmasterCell.swift */; };
+		0B07AA59242190530008B67A /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07AA58242190530008B67A /* Ticket.swift */; };
+		0B07AA5D2421C4D50008B67A /* APIExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07AA5C2421C4D50008B67A /* APIExperience.swift */; };
 		0B33D7CA24201E5300AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7CB24201E7400AF4D11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */; };
 		0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B33D7D1242020EC00AF4D11 /* Secret.swift */; };
@@ -47,7 +49,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0B01282E2421879000F37A2B /* TicketmasterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketmasterTableViewCell.swift; sourceTree = "<group>"; };
+		0B01282E2421879000F37A2B /* TicketmasterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketmasterCell.swift; sourceTree = "<group>"; };
+		0B07AA58242190530008B67A /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
+		0B07AA5C2421C4D50008B67A /* APIExperience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExperience.swift; sourceTree = "<group>"; };
 		0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B33D7D1242020EC00AF4D11 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		0B33D7D32420226700AF4D11 /* AuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
@@ -103,6 +107,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B01283024218A2C00F37A2B /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0B01282E2421879000F37A2B /* TicketmasterCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		0B07AA57242190460008B67A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0B07AA58242190530008B67A /* Ticket.swift */,
+				0B07AA5C2421C4D50008B67A /* APIExperience.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		0B33D7CC2420203800AF4D11 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -131,7 +152,6 @@
 			children = (
 				0B9B6922241FC7EE0062CDF2 /* DetailView.swift */,
 				0B33D7E02420240400AF4D11 /* EmptyView.swift */,
-				0B01282E2421879000F37A2B /* TicketmasterTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -196,8 +216,10 @@
 		0B3CF946241FBF2B001CD23D /* ctatestthing */ = {
 			isa = PBXGroup;
 			children = (
+				0B07AA57242190460008B67A /* Models */,
 				0B33D7C924201E5300AF4D11 /* GoogleService-Info.plist */,
 				0B3CF955241FBF31001CD23D /* Info.plist */,
+				0B01283024218A2C00F37A2B /* Cells */,
 				0B33D7CC2420203800AF4D11 /* Controllers */,
 				0B33D7DF242023A700AF4D11 /* Extensions */,
 				0B33D7D0242020D700AF4D11 /* Secrets */,
@@ -421,13 +443,15 @@
 				0B33D7D2242020EC00AF4D11 /* Secret.swift in Sources */,
 				0B9B6923241FC7EE0062CDF2 /* DetailView.swift in Sources */,
 				0B33D7D6242022A000AF4D11 /* GenericCoderAPI.swift in Sources */,
+				0B07AA5D2421C4D50008B67A /* APIExperience.swift in Sources */,
 				0B33D7DD2420239900AF4D11 /* UIViewController+Alerts.swift in Sources */,
-				0B01282F2421879000F37A2B /* TicketmasterTableViewCell.swift in Sources */,
+				0B01282F2421879000F37A2B /* TicketmasterCell.swift in Sources */,
 				0B9B6919241FC79F0062CDF2 /* LoginViewController.swift in Sources */,
 				0B33D7E3242116B000AF4D11 /* FirestoreSession.swift in Sources */,
 				0B3CF94C241FBF2B001CD23D /* ViewController.swift in Sources */,
 				0B3CF948241FBF2B001CD23D /* AppDelegate.swift in Sources */,
 				0B9B691D241FC7B20062CDF2 /* FavoritesViewController.swift in Sources */,
+				0B07AA59242190530008B67A /* Ticket.swift in Sources */,
 				0B9B691F241FC7B70062CDF2 /* SettingViewController.swift in Sources */,
 				0B3CF94A241FBF2B001CD23D /* SceneDelegate.swift in Sources */,
 				0B33D7DB2420239000AF4D11 /* UIViewController+Navigation.swift in Sources */,
