@@ -154,7 +154,7 @@
             </objects>
             <point key="canvasLocation" x="1913.0434782608697" y="115.84821428571428"/>
         </scene>
-        <!--Item-->
+        <!--Settings-->
         <scene sceneID="TJ1-ig-6cn">
             <objects>
                 <viewController id="lgI-E1-nqu" customClass="SettingViewController" customModule="ctatestthing" customModuleProvider="target" sceneMemberID="viewController">
@@ -195,21 +195,21 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="leading" secondItem="xuh-dv-Qyl" secondAttribute="leading" id="4TX-2H-qH4"/>
                             <constraint firstItem="xuh-dv-Qyl" firstAttribute="centerX" secondItem="7ue-wl-XGW" secondAttribute="centerX" id="5QJ-07-b7G"/>
                             <constraint firstItem="Ihb-mf-Sjq" firstAttribute="trailing" secondItem="dqr-h4-qsX" secondAttribute="trailing" constant="8" id="6hF-I0-zif"/>
+                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="width" secondItem="xuh-dv-Qyl" secondAttribute="width" id="GQc-2x-spz"/>
+                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="centerX" secondItem="xuh-dv-Qyl" secondAttribute="centerX" id="POy-uj-p6E"/>
                             <constraint firstItem="dqr-h4-qsX" firstAttribute="top" secondItem="Ihb-mf-Sjq" secondAttribute="top" constant="20" id="Paj-TX-9Qj"/>
                             <constraint firstItem="7ue-wl-XGW" firstAttribute="top" secondItem="dqr-h4-qsX" secondAttribute="bottom" constant="8" id="QDR-pL-eQW"/>
                             <constraint firstItem="dqr-h4-qsX" firstAttribute="leading" secondItem="Ihb-mf-Sjq" secondAttribute="leading" constant="8" id="SWf-XJ-O5z"/>
                             <constraint firstItem="7ue-wl-XGW" firstAttribute="trailing" secondItem="Ihb-mf-Sjq" secondAttribute="trailing" id="aGU-bW-qPd"/>
                             <constraint firstItem="7ue-wl-XGW" firstAttribute="leading" secondItem="Ihb-mf-Sjq" secondAttribute="leading" id="aRB-OK-Puv"/>
-                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="trailing" secondItem="xuh-dv-Qyl" secondAttribute="trailing" id="cmO-9f-7h7"/>
                             <constraint firstItem="8Hq-xS-xVe" firstAttribute="top" secondItem="xuh-dv-Qyl" secondAttribute="bottom" constant="8" id="gJR-fN-evw"/>
                             <constraint firstItem="xuh-dv-Qyl" firstAttribute="top" secondItem="7ue-wl-XGW" secondAttribute="bottom" constant="8" id="gMf-c8-TDX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ihb-mf-Sjq"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="ptq-s1-j5d"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="rosette" catalog="system" id="ptq-s1-j5d"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="label" destination="dqr-h4-qsX" id="Krm-VW-GmM"/>
@@ -220,11 +220,11 @@
             </objects>
             <point key="canvasLocation" x="1003" y="842"/>
         </scene>
-        <!--Item-->
+        <!--Search-->
         <scene sceneID="7hD-oP-dFR">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iRq-5q-gH0" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="PiK-mR-9V9"/>
+                    <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass" catalog="system" id="PiK-mR-9V9"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rcm-7C-dnC">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -239,11 +239,11 @@
             </objects>
             <point key="canvasLocation" x="1002.8985507246377" y="-605.35714285714278"/>
         </scene>
-        <!--Item-->
+        <!--Favorites-->
         <scene sceneID="Wg7-g1-sgl">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zfE-CH-orC" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="i5U-vu-GcV"/>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="folder" catalog="system" id="i5U-vu-GcV"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2oG-td-kmr">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -261,5 +261,8 @@
     </scenes>
     <resources>
         <image name="archivebox" catalog="system" width="64" height="52"/>
+        <image name="folder" catalog="system" width="64" height="46"/>
+        <image name="magnifyingglass" catalog="system" width="64" height="56"/>
+        <image name="rosette" catalog="system" width="50" height="64"/>
     </resources>
 </document>
