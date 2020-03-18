@@ -47,6 +47,8 @@ class SearchViewController: UIViewController {
     
     private func configureView() {
         tableView.backgroundView = EmptyView(title: "Nothing", message: "For Ticketmaster, type in a location into the searchbar.\nFor Rijksmuseum, type in an item into the searchbar.")
+        
+        tableView.register(UINib(nibName: "TicketCell", bundle: nil), forCellReuseIdentifier: "ticketCell")
     }
     
     private func loadData() {
@@ -68,7 +70,9 @@ class SearchViewController: UIViewController {
         GenericCoderAPI.manager.getJSON(objectType: Ticket.self, with: url) { [weak self] result in
             switch result {
             case .failure(let error):
-                self?.showAlert(title: "Error", message: error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             case .success(let wrapper):
                 self?.events = wrapper.embedded.events
             }
@@ -109,14 +113,19 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch experience {
         case .ticketMaster:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ticketCell", for: indexPath) as? TicketmasterCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ticketCell", for: indexPath) as? TicketCell else {
                 return UITableViewCell()
             }
-            cell.configureCell(events[indexPath.row])
+            cell.delegate = self
+            cell.configureCell(events[indexPath.row], onFavorite: false)
             return cell
         default:
             return UITableViewCell()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigationController?.pushViewController(DetailViewController(event: events[indexPath.row]), animated: true)
     }
     
     
@@ -135,6 +144,42 @@ extension SearchViewController: UISearchBarDelegate {
             break
         case .ticketMaster:
             getEvents(text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+        }
+    }
+}
+
+extension SearchViewController: TicketCellDelegate {
+    func didSelectTicket(_ ticketCell: TicketCell, ticket: Event) {
+        
+        if ticketCell.favoriteButton.imageView?.image == UIImage(systemName: "heart") {
+            
+            FirestoreSession.session.addItem(ticket, experience: .ticketMaster) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
+                    }
+                case .success:
+                    DispatchQueue.main.async {
+                        ticketCell.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    }
+                }
+            }
+            
+        } else {
+            
+            FirestoreSession.session.deleteItem(ticket, experience: .ticketMaster) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
+                    }
+                case .success:
+                    DispatchQueue.main.async {
+                        ticketCell.favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                    }
+                }
+            }
         }
     }
 }

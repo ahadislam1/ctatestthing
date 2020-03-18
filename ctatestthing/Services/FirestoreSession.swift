@@ -64,9 +64,8 @@ class FirestoreSession {
             .getDocument { (documentSnapshot, error) in
                 if let error = error {
                     completion(.failure(error))
-                } else if let documentSnapshot = documentSnapshot, documentSnapshot.exists {
-                    let x = documentSnapshot.data()
-                    let y = x!["apiExperience"] as! String
+                } else if let documentSnapshot = documentSnapshot, documentSnapshot.exists, let data = documentSnapshot.data() {
+                    let y = data["apiExperience"] as! String
                     completion(.success(y))
                 }
         }
@@ -81,13 +80,7 @@ class FirestoreSession {
                     completion(.failure(error))
                 }
                 
-                guard let document = documentSnapshot else {
-                    print("no document")
-                    return
-                }
-                
-                guard let data = document.data() else {
-                    print("no data")
+                guard let document = documentSnapshot, let data = document.data() else {
                     return
                 }
                 
@@ -96,6 +89,17 @@ class FirestoreSession {
                 
         }
     }
+//    
+//    public func addListeners<T1: Codable & Identification, T2: Codable & Identification>(experience: APIExperience, completion: @escaping (Result<[T1], Error>) -> ()) {
+//
+//        guard let user = Auth.auth().currentUser else { return }
+//        db.collection(FirestoreSession.usersCollection)
+//        .document(user.uid)
+//        .collection(experience == .ticketMaster ?
+//        FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+//    }
+//
+    
     
     public func addItem<T: Codable & Identification>(_ item: T, experience: APIExperience, completion: @escaping (Result<Bool, Error>) -> ()) {
         guard let user = Auth.auth().currentUser else { return }
@@ -154,7 +158,7 @@ class FirestoreSession {
         db.collection(FirestoreSession.usersCollection)
             .document(user.uid)
             .collection(experience == .ticketMaster ?
-                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
             .getDocuments { (snapshot, error) in
                 if let error = error {
                     completion(.failure(error))
