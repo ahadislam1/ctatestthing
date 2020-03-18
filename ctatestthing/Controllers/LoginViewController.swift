@@ -105,7 +105,7 @@ class LoginViewController: UIViewController {
                 }
             case .success(let bool):
                 print(bool)
-                UIViewController.showViewController(from: "Profile", id: "profileVC")
+                UIViewController.showViewController(from: "Main", id: "tabBC")
             }
         }
     }

@@ -182,9 +182,20 @@
                                     <action selector="buttonPressed:" destination="lgI-E1-nqu" eventType="touchUpInside" id="z2E-mm-0Ya"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Hq-xS-xVe">
+                                <rect key="frame" x="168" y="355" width="78" height="30"/>
+                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Sign out">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="signOut:" destination="lgI-E1-nqu" eventType="touchUpInside" id="jvh-MA-At1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="leading" secondItem="xuh-dv-Qyl" secondAttribute="leading" id="4TX-2H-qH4"/>
                             <constraint firstItem="xuh-dv-Qyl" firstAttribute="centerX" secondItem="7ue-wl-XGW" secondAttribute="centerX" id="5QJ-07-b7G"/>
                             <constraint firstItem="Ihb-mf-Sjq" firstAttribute="trailing" secondItem="dqr-h4-qsX" secondAttribute="trailing" constant="8" id="6hF-I0-zif"/>
                             <constraint firstItem="dqr-h4-qsX" firstAttribute="top" secondItem="Ihb-mf-Sjq" secondAttribute="top" constant="20" id="Paj-TX-9Qj"/>
@@ -192,6 +203,8 @@
                             <constraint firstItem="dqr-h4-qsX" firstAttribute="leading" secondItem="Ihb-mf-Sjq" secondAttribute="leading" constant="8" id="SWf-XJ-O5z"/>
                             <constraint firstItem="7ue-wl-XGW" firstAttribute="trailing" secondItem="Ihb-mf-Sjq" secondAttribute="trailing" id="aGU-bW-qPd"/>
                             <constraint firstItem="7ue-wl-XGW" firstAttribute="leading" secondItem="Ihb-mf-Sjq" secondAttribute="leading" id="aRB-OK-Puv"/>
+                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="trailing" secondItem="xuh-dv-Qyl" secondAttribute="trailing" id="cmO-9f-7h7"/>
+                            <constraint firstItem="8Hq-xS-xVe" firstAttribute="top" secondItem="xuh-dv-Qyl" secondAttribute="bottom" constant="8" id="gJR-fN-evw"/>
                             <constraint firstItem="xuh-dv-Qyl" firstAttribute="top" secondItem="7ue-wl-XGW" secondAttribute="bottom" constant="8" id="gMf-c8-TDX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ihb-mf-Sjq"/>

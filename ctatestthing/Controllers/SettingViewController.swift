@@ -54,6 +54,10 @@ class SettingViewController: UIViewController {
         }
     }
     
+    @IBAction func signOut(_ sender: UIButton) {
+        try? Auth.auth().signOut()
+        UIViewController.showViewController(from: "Login", id: "loginVC")
+    }
     private func configureView() {
         guard let user = Auth.auth().currentUser else {
             return
