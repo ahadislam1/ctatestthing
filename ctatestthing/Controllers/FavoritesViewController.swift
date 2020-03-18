@@ -20,6 +20,15 @@ class FavoritesViewController: UIViewController {
         }
     }
     
+    var objects = [ArtObject]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.tableView.backgroundColor = nil
+            }
+        }
+    }
+    
     var experience: APIExperience! {
         didSet {
             DispatchQueue.main.async {
@@ -38,46 +47,13 @@ class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
+        listener()
         configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print(objects.count)
         super.viewWillAppear(animated)
-        loadItems()
-    }
-    
-    private func loadData() {
-        FirestoreSession.session.getUserExperience { result in
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
-                self.listener()
-            }
-        }
-    }
-    
-    private func loadItems() {
-        switch experience {
-        case .rijksMuseum:
-            break
-        case .ticketMaster:
-            FirestoreSession.session.fetchItems(type: Event.self, experience: experience) { [weak self] result in
-                switch result {
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        self?.showAlert(title: "Error", message: error.localizedDescription)
-                    }
-                case .success(let events):
-                    self?.events = events
-                }
-            }
-            
-        default:
-            break
-        }
     }
     
     private func listener() {
@@ -89,21 +65,45 @@ class FavoritesViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
+        
+        FirestoreSession.session.addListener(objectType: Event.self, experience: .ticketMaster) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
+            case .success(let events):
+                self?.events = events
+            }
+        }
+        
+        FirestoreSession.session.addListener(objectType: ArtObject.self, experience: .rijksMuseum) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
+            case .success(let objects):
+                self?.objects = objects
+            }
+        }
     }
     
     private func configureView() {
         tableView.register(UINib(nibName: "TicketCell", bundle: nil), forCellReuseIdentifier: "ticketCell")
+        
+        tableView.register(UINib(nibName: "RijksCell", bundle: nil), forCellReuseIdentifier: "rijksCell")
     }
     
 }
 
 extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        experience == .ticketMaster ? 200 : 300
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+        experience == .ticketMaster ? events.count : objects.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -114,9 +114,29 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
             }
             
             cell.configureCell(events[indexPath.row], onFavorite: true)
+            
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "rijksCell", for: indexPath) as? RijksCell else {
+                return UITableViewCell()
+            }
+            
+            cell.configureCell(object: objects[indexPath.row], onFavorite: true)
+            
+            return cell
         }
         
-        return UITableViewCell()
+        
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if experience == .ticketMaster {
+            navigationController?.pushViewController(DetailViewController(event: events[indexPath.row]), animated: true)
+            
+        } else {
+            navigationController?.pushViewController(DetailViewController(object: objects[indexPath.row]), animated: true)
+        }
     }
     
     

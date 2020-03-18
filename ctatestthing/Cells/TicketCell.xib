@@ -60,7 +60,7 @@
                 <outlet property="secondLabel" destination="t31-Rw-9Dw" id="ZLZ-1X-nbo"/>
                 <outlet property="ticketImageView" destination="KN8-PL-WzM" id="Spo-bL-FL0"/>
             </connections>
-            <point key="canvasLocation" x="258" y="214"/>
+            <point key="canvasLocation" x="257.97101449275362" y="213.61607142857142"/>
         </tableViewCell>
     </objects>
     <resources>

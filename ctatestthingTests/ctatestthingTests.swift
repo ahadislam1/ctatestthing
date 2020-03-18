@@ -79,5 +79,24 @@ keyNotFound(CodingKeys(stringValue: "_embedded", intValue: nil), Swift.DecodingE
         
         wait(for: [exp], timeout: 2)
     }
+    
+    func testRijkAPI() {
+        let url = "https://www.rijksmuseum.nl/api/nl/collection?key=\(Secret.rijksKey)&culture=en&imgonly=True&q=city"
+        var objects = [ArtObject]()
+        let exp = XCTestExpectation()
+        
+        GenericCoderAPI.manager.getJSON(objectType: Art.self, with: url) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            case .success(let art):
+                XCTAssertEqual(art.count, objects.count)
+                objects = art.artObjects
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 2)
+    }
 
 }

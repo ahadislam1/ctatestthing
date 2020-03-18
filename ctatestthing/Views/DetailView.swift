@@ -54,6 +54,13 @@ class DetailView: UIView {
         
     }
     
+    public func configureView(object: ArtObject) {
+        imageView.kf.setImage(with: URL(string: object.webImage.url))
+        titleLabel.text = object.longTitle
+        textView.isHidden = true
+        backgroundColor = .systemGray3
+    }
+    
     private func commonInit() {
         backgroundColor = .secondarySystemBackground
         setupImageView()

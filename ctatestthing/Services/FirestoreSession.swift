@@ -89,16 +89,36 @@ class FirestoreSession {
                 
         }
     }
-//    
-//    public func addListeners<T1: Codable & Identification, T2: Codable & Identification>(experience: APIExperience, completion: @escaping (Result<[T1], Error>) -> ()) {
-//
-//        guard let user = Auth.auth().currentUser else { return }
-//        db.collection(FirestoreSession.usersCollection)
-//        .document(user.uid)
-//        .collection(experience == .ticketMaster ?
-//        FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
-//    }
-//
+    
+    public func addListener<T: Codable>(objectType: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) {
+        guard let user = Auth.auth().currentUser else { return }
+        
+        var arr = [T?]()
+        
+        db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .collection(experience ==  .ticketMaster ?
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            .addSnapshotListener { (snapshot, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let snapshot = snapshot {
+                    for document in snapshot.documents {
+                        do {
+                            let item = try document.data(as: T.self)
+                            arr.append(item)
+                        } catch {
+                            completion(.failure(error))
+                        }
+                    }
+                }
+                
+                completion(.success(arr.compactMap{$0}))
+        }
+
+        
+    }
+    
     
     
     public func addItem<T: Codable & Identification>(_ item: T, experience: APIExperience, completion: @escaping (Result<Bool, Error>) -> ()) {
@@ -150,7 +170,7 @@ class FirestoreSession {
         }
         
     }
-        
+    
     public func fetchItems<T: Codable>(type: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) {
         guard let user = Auth.auth().currentUser else { return }
         var items = [T?]()
@@ -158,7 +178,7 @@ class FirestoreSession {
         db.collection(FirestoreSession.usersCollection)
             .document(user.uid)
             .collection(experience == .ticketMaster ?
-            FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
             .getDocuments { (snapshot, error) in
                 if let error = error {
                     completion(.failure(error))

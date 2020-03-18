@@ -18,12 +18,21 @@ class DetailViewController: UIViewController {
     }()
     
     var event: Event?
+    var object: ArtObject?
     
     init(event: Event) {
         self.event = event
         super.init(nibName: nil, bundle: nil)
         addToNav()
         configureWithEvent()
+        
+    }
+    
+    init(object: ArtObject) {
+        self.object = object
+        super.init(nibName: nil, bundle: nil)
+        addToNav()
+        configureWithObject()
         
     }
     
@@ -74,6 +83,38 @@ class DetailViewController: UIViewController {
                     }
                 }
             }
+        } else if let object = object {
+            sender.isEnabled = false
+            if barButton.image == UIImage(systemName: "heart") {
+                FirestoreSession.session.addItem(object, experience: .rijksMuseum) { [weak self] result in
+                    sender.isEnabled = true
+                    switch result {
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            self?.showAlert(title: "Error", message: error.localizedDescription)
+                        }
+                    case .success:
+                        DispatchQueue.main.async {
+                            self?.barButton.image = UIImage(systemName: "heart.fill")
+                        }
+                    }
+                }
+            } else {
+                FirestoreSession.session.deleteItem(object, experience: .rijksMuseum) { [weak self] result in
+                    sender.isEnabled = true
+                    switch result {
+                        
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            self?.showAlert(title: "Error", message: error.localizedDescription)
+                        }
+                    case .success:
+                        DispatchQueue.main.async {
+                            self?.barButton.image = (UIImage(systemName: "heart"))
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -87,8 +128,29 @@ class DetailViewController: UIViewController {
         checkIfEventIsFavorited(event: event)
     }
     
+    private func configureWithObject() {
+        let object = self.object!
+        detailView.configureView(object: object)
+        checkIfObjectIsFavorited(object: object)
+    }
+    
     private func checkIfEventIsFavorited(event: Event) {
         FirestoreSession.session.isItemFavorited(event, experience: .ticketMaster) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
+            case .success(let bool):
+                DispatchQueue.main.async {
+                    self?.barButton.image = bool ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+                }
+            }
+        }
+    }
+    
+    private func checkIfObjectIsFavorited(object: ArtObject) {
+        FirestoreSession.session.isItemFavorited(object, experience: .rijksMuseum) { [weak self] result in
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {

@@ -37,7 +37,7 @@ struct Event: Codable, Identification {
     let test: Bool
     let url: String?
     let locale: String
-    let images: [Image]
+    let images: [TicketImage]
     let dates: Dates
     let info: String?
     let priceRanges: [PriceRange]?
@@ -132,7 +132,7 @@ struct Attraction: Codable {
     let url: String
     let locale: String
     let externalLinks: ExternalLinks?
-    let images: [Image]
+    let images: [TicketImage]
     let upcomingEvents: UpcomingEvents
     let links: AttractionLinks
 
@@ -192,7 +192,7 @@ struct Musicbrainz: Codable {
 }
 
 // MARK: - Image
-struct Image: Codable {
+struct TicketImage: Codable {
     let ratio: String?
     let url: String
     let width: Int
@@ -245,7 +245,7 @@ struct Venue: Codable {
     let test: Bool
     let url: String?
     let locale: String
-    let images: [Image]?
+    let images: [TicketImage]?
     let postalCode: String
     let timezone: String
     let city: City
