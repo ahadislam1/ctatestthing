@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class FavoritesViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
+    weak var experienceListener: ListenerRegistration?
+    weak var eventListener: ListenerRegistration?
+    weak var objectListener: ListenerRegistration?
     
     var events = [Event]() {
         didSet {
@@ -47,26 +52,34 @@ class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listener()
         configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print(objects.count)
         super.viewWillAppear(animated)
+        listener()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        [experienceListener, objectListener, eventListener].forEach {
+            $0?.remove()
+        }
     }
     
     private func listener() {
-        FirestoreSession.session.addListener { result in
+        experienceListener = FirestoreSession.session.addListener { [weak self] result in
             switch result {
             case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
+                self?.experience = APIExperience(rawValue: str)!
             case .failure(let error):
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             }
         }
         
-        FirestoreSession.session.addListener(objectType: Event.self, experience: .ticketMaster) { [weak self] result in
+       eventListener =  FirestoreSession.session.addListener(objectType: Event.self, experience: .ticketMaster) { [weak self] result in
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -77,7 +90,7 @@ class FavoritesViewController: UIViewController {
             }
         }
         
-        FirestoreSession.session.addListener(objectType: ArtObject.self, experience: .rijksMuseum) { [weak self] result in
+        objectListener = FirestoreSession.session.addListener(objectType: ArtObject.self, experience: .rijksMuseum) { [weak self] result in
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {

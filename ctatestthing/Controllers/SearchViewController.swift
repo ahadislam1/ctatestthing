@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class SearchViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    weak var experienceListener: ListenerRegistration?
     
     var events = [Event]() {
         didSet {
@@ -26,7 +29,7 @@ class SearchViewController: UIViewController {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                self.tableView.backgroundColor = nil
+                self.tableView.backgroundView = nil
             }
         }
     }
@@ -41,17 +44,26 @@ class SearchViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        listener()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        listener()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        listener()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        experienceListener?.remove()
     }
     
     private func configureView() {
@@ -92,13 +104,14 @@ class SearchViewController: UIViewController {
     }
     
     private func listener() {
-        FirestoreSession.session.addListener { result in
+       experienceListener = FirestoreSession.session.addListener { [weak self] result in
             switch result {
             case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
-                print("Listener updated on SearchVC.")
+                self?.experience = APIExperience(rawValue: str)!
             case .failure(let error):
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             }
         }
     }

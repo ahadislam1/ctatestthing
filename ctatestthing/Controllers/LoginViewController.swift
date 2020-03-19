@@ -74,7 +74,6 @@ class LoginViewController: UIViewController {
                         self?.errorLabel.isHidden = false
                     }
                 case .success(let result):
-                    print(result.description)
                     self?.createDatabaseUser(result)
                 }
             }
@@ -86,8 +85,7 @@ class LoginViewController: UIViewController {
                         self?.errorLabel.text = error.localizedDescription
                         self?.errorLabel.isHidden = false
                     }
-                case .success(let result):
-                    print(result.description)
+                case .success( _):
                     UIViewController.showViewController(from: "Main", id: "tabBC")
                 }
             }
@@ -103,8 +101,7 @@ class LoginViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.showAlert(title: "Error", message: error.localizedDescription)
                 }
-            case .success(let bool):
-                print(bool)
+            case .success( _):
                 UIViewController.showViewController(from: "Main", id: "tabBC")
             }
         }

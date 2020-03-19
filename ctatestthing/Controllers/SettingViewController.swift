@@ -8,11 +8,14 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class SettingViewController: UIViewController {
     
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var pickerView: UIPickerView!
+    
+    weak var experienceListener: ListenerRegistration?
     
     var experience: APIExperience!
     
@@ -30,6 +33,18 @@ class SettingViewController: UIViewController {
         super.viewDidLoad()
         
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        listener()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        experienceListener?.remove()
     }
     
     @IBAction func buttonPressed(_ sender: UIButton) {
@@ -65,27 +80,29 @@ class SettingViewController: UIViewController {
         
         label.text = user.email
     }
+    
     private func loadData() {
-        FirestoreSession.session.getUserExperience { result in
+        FirestoreSession.session.getUserExperience { [weak self] result in
             switch result {
             case .failure(let error):
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
-                self.listener()
-                print(self.experience.description)
+                self?.experience = APIExperience(rawValue: str)!
             }
         }
     }
     
     private func listener() {
-        FirestoreSession.session.addListener { result in
+        experienceListener = FirestoreSession.session.addListener { [weak self] result in
             switch result {
             case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
-                print("Listener updated.")
+                self?.experience = APIExperience(rawValue: str)!
             case .failure(let error):
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             }
         }
     }

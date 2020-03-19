@@ -71,9 +71,9 @@ class FirestoreSession {
         }
     }
     
-    public func addListener(completion: @escaping (Result<String, Error>) -> ()) {
-        guard let user = Auth.auth().currentUser else { return }
-        db.collection(FirestoreSession.usersCollection)
+    public func addListener(completion: @escaping (Result<String, Error>) -> ()) -> ListenerRegistration? {
+        guard let user = Auth.auth().currentUser else { return nil }
+        let x = db.collection(FirestoreSession.usersCollection)
             .document(user.uid)
             .addSnapshotListener { (documentSnapshot, error) in
                 if let error = error {
@@ -88,14 +88,16 @@ class FirestoreSession {
                 
                 
         }
+        
+        return x
     }
     
-    public func addListener<T: Codable>(objectType: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) {
-        guard let user = Auth.auth().currentUser else { return }
+    public func addListener<T: Codable>(objectType: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) -> ListenerRegistration? {
+        guard let user = Auth.auth().currentUser else { return nil }
         
         var arr = [T?]()
         
-        db.collection(FirestoreSession.usersCollection)
+        let x = db.collection(FirestoreSession.usersCollection)
             .document(user.uid)
             .collection(experience ==  .ticketMaster ?
                 FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
@@ -115,6 +117,9 @@ class FirestoreSession {
                 
                 completion(.success(arr.compactMap{$0}))
         }
+        
+        return x
+        
 
         
     }
