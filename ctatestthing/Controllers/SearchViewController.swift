@@ -7,13 +7,25 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class SearchViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    weak var experienceListener: ListenerRegistration?
+    
     var events = [Event]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.tableView.backgroundView = nil
+            }
+        }
+    }
+    
+    var objects = [ArtObject]() {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -30,36 +42,28 @@ class SearchViewController: UIViewController {
         }
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        loadData()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        loadData()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
     }
     
-    private func configureView() {
-        tableView.backgroundView = EmptyView(title: "Nothing", message: "For Ticketmaster, type in a location into the searchbar.\nFor Rijksmuseum, type in an item into the searchbar.")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        listener()
     }
     
-    private func loadData() {
-        FirestoreSession.session.getUserExperience { result in
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
-                self.listener()
-                print(self.experience.description)
-            }
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        experienceListener?.remove()
+    }
+    
+    private func configureView() {
+        tableView.backgroundView = EmptyView(title: "Nothing", message: "For Ticketmaster, type in a location into the searchbar.\nFor Rijksmuseum, type in an item into the searchbar.")
+        
+        tableView.register(UINib(nibName: "TicketCell", bundle: nil), forCellReuseIdentifier: "ticketCell")
+        tableView.register(UINib(nibName: "RijksCell", bundle: nil), forCellReuseIdentifier: "rijksCell")
     }
     
     private func getEvents(_ query: String) {
@@ -68,21 +72,39 @@ class SearchViewController: UIViewController {
         GenericCoderAPI.manager.getJSON(objectType: Ticket.self, with: url) { [weak self] result in
             switch result {
             case .failure(let error):
-                self?.showAlert(title: "Error", message: error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             case .success(let wrapper):
                 self?.events = wrapper.embedded.events
             }
         }
     }
     
+    private func getObjects(_ query: String) {
+        let url = "https://www.rijksmuseum.nl/api/nl/collection?key=\(Secret.rijksKey)&culture=en&imgonly=True&q=\(query)"
+        
+        GenericCoderAPI.manager.getJSON(objectType: Art.self, with: url) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
+            case .success(let wrapper):
+                self?.objects = wrapper.artObjects
+            }
+        }
+    }
+    
     private func listener() {
-        FirestoreSession.session.addListener { result in
+       experienceListener = FirestoreSession.session.addListener { [weak self] result in
             switch result {
             case .success(let str):
-                self.experience = APIExperience(rawValue: str)!
-                print("Listener updated.")
+                self?.experience = APIExperience(rawValue: str)!
             case .failure(let error):
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: error.localizedDescription)
+                }
             }
         }
     }
@@ -92,13 +114,13 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        200
+        experience == .ticketMaster ? 200 : 300
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch experience {
         case .rijksMuseum:
-            return 0
+            return objects.count
         case .ticketMaster:
             return events.count
         default:
@@ -109,13 +131,30 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch experience {
         case .ticketMaster:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ticketCell", for: indexPath) as? TicketmasterCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ticketCell", for: indexPath) as? TicketCell else {
                 return UITableViewCell()
             }
-            cell.configureCell(events[indexPath.row])
+            cell.delegate = self
+            cell.configureCell(events[indexPath.row], onFavorite: false)
+            return cell
+        case .rijksMuseum:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "rijksCell", for: indexPath) as? RijksCell else {
+                return UITableViewCell()
+            }
+            cell.delegate = self
+            cell.configureCell(object: objects[indexPath.row], onFavorite: false)
             return cell
         default:
             return UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if experience == .ticketMaster {
+        navigationController?.pushViewController(DetailViewController(event: events[indexPath.row]), animated: true)
+        } else {
+            navigationController?.pushViewController(DetailViewController(object: objects[indexPath.row]), animated: true)
         }
     }
     
@@ -132,9 +171,82 @@ extension SearchViewController: UISearchBarDelegate {
         
         switch experience {
         case .rijksMuseum:
-            break
+            getObjects(text.lowercased().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
         case .ticketMaster:
-            getEvents(text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+            getEvents(text.lowercased().addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
         }
     }
+}
+
+extension SearchViewController: TicketCellDelegate {
+    func didSelectTicket(_ ticketCell: TicketCell, ticket: Event) {
+        
+        if ticketCell.favoriteButton.imageView?.image == UIImage(systemName: "heart") {
+            
+            FirestoreSession.session.addItem(ticket, experience: .ticketMaster) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
+                    }
+                case .success:
+                    DispatchQueue.main.async {
+                        ticketCell.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    }
+                }
+            }
+            
+        } else {
+            
+            FirestoreSession.session.deleteItem(ticket, experience: .ticketMaster) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
+                    }
+                case .success:
+                    DispatchQueue.main.async {
+                        ticketCell.favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension SearchViewController: RijksCellDelegate {
+    func didPressButton(cell: RijksCell, object: ArtObject) {
+        if cell.button.imageView?.image == UIImage(systemName: "heart") {
+            
+            FirestoreSession.session.addItem(object, experience: .rijksMuseum) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
+                    }
+                case .success:
+                    DispatchQueue.main.async {
+                        cell.button.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    }
+                }
+            }
+            
+        } else {
+            
+            FirestoreSession.session.deleteItem(object, experience: .rijksMuseum) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
+                    }
+                case .success:
+                    DispatchQueue.main.async {
+                        cell.button.setImage(UIImage(systemName: "heart"), for: .normal)
+                    }
+                }
+            }
+        }
+    }
+    
+    
 }

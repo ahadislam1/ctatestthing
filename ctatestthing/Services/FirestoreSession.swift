@@ -64,30 +64,23 @@ class FirestoreSession {
             .getDocument { (documentSnapshot, error) in
                 if let error = error {
                     completion(.failure(error))
-                } else if let documentSnapshot = documentSnapshot, documentSnapshot.exists {
-                    let x = documentSnapshot.data()
-                    let y = x!["apiExperience"] as! String
+                } else if let documentSnapshot = documentSnapshot, documentSnapshot.exists, let data = documentSnapshot.data() {
+                    let y = data["apiExperience"] as! String
                     completion(.success(y))
                 }
         }
     }
     
-    public func addListener(completion: @escaping (Result<String, Error>) -> ()) {
-        guard let user = Auth.auth().currentUser else { return }
-        db.collection(FirestoreSession.usersCollection)
+    public func addListener(completion: @escaping (Result<String, Error>) -> ()) -> ListenerRegistration? {
+        guard let user = Auth.auth().currentUser else { return nil }
+        let x = db.collection(FirestoreSession.usersCollection)
             .document(user.uid)
             .addSnapshotListener { (documentSnapshot, error) in
                 if let error = error {
                     completion(.failure(error))
                 }
                 
-                guard let document = documentSnapshot else {
-                    print("no document")
-                    return
-                }
-                
-                guard let data = document.data() else {
-                    print("no data")
+                guard let document = documentSnapshot, let data = document.data() else {
                     return
                 }
                 
@@ -95,7 +88,43 @@ class FirestoreSession {
                 
                 
         }
+        
+        return x
     }
+    
+    public func addListener<T: Codable>(objectType: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) -> ListenerRegistration? {
+        guard let user = Auth.auth().currentUser else { return nil }
+        
+        var arr = [T?]()
+        
+        let x = db.collection(FirestoreSession.usersCollection)
+            .document(user.uid)
+            .collection(experience ==  .ticketMaster ?
+                FirestoreSession.ticketsCollection : FirestoreSession.artsCollection)
+            .addSnapshotListener { (snapshot, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let snapshot = snapshot {
+                    for document in snapshot.documents {
+                        do {
+                            let item = try document.data(as: T.self)
+                            arr.append(item)
+                        } catch {
+                            completion(.failure(error))
+                        }
+                    }
+                }
+                
+                completion(.success(arr.compactMap{$0}))
+        }
+        
+        return x
+        
+
+        
+    }
+    
+    
     
     public func addItem<T: Codable & Identification>(_ item: T, experience: APIExperience, completion: @escaping (Result<Bool, Error>) -> ()) {
         guard let user = Auth.auth().currentUser else { return }
@@ -146,7 +175,7 @@ class FirestoreSession {
         }
         
     }
-        
+    
     public func fetchItems<T: Codable>(type: T.Type, experience: APIExperience, completion: @escaping (Result<[T], Error>) -> ()) {
         guard let user = Auth.auth().currentUser else { return }
         var items = [T?]()
